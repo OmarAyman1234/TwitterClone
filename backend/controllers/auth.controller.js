@@ -10,7 +10,7 @@ const logout = async (req, res) => {
 
 }
 
-export {
+export default {
   signup,
   login,
   logout
