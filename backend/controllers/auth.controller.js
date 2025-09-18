@@ -20,7 +20,7 @@ const signup = async (req, res) => {
       return res.status(409).json({error: "Username is already taken"})
     }
 
-    const emailExists = await User.findOne({username});
+    const emailExists = await User.findOne({email});
     if(emailExists) {
       return res.status(409).json({error: "Email is already taken"})
     }
