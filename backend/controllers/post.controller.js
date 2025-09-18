@@ -90,15 +90,16 @@ const createPost = async (req, res) => {
     const { text } = req.body;
     let { img } = req.body;
 
+    if(!text && !img ) {
+      return res.status(400).json({error: "A post should contain a text or img"});
+    }
+
     const userId = req.user._id
     const user = await User.findById(userId);
 
     if(!user) 
       return res.status(404).json({error: "User not found"})
   
-    if(!text && !img) {
-      res.status(400).json({error: "A post should contain a text or img"});
-    }
 
     if(img) {
       const uploadedResponse = await cloudinary.uploader.upload(img);
@@ -189,7 +190,7 @@ const deletePost = async (req, res) => {
     }
 
     if(postToDel.img) {
-      const imgId = post.img.split("/").pop().split(".")[0];
+      const imgId = postToDel.img.split("/").pop().split(".")[0];
       await cloudinary.uploader.destroy(imgId);
     }
 
