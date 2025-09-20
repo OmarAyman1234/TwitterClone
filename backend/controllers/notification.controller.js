@@ -9,7 +9,7 @@ const getNotifications = async (req, res) => {
     if(!user) 
       return res.status(404).json({error: "User not found"});
     
-    const notifications = await Notification.find({to: userId}).populate({
+    const notifications = await Notification.find({to: userId}).sort({createdAt: -1}).populate({
       path: "from",
       select: "username profileImg"
     })
