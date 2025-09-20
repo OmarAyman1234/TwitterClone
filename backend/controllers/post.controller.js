@@ -133,20 +133,20 @@ const likeUnlikePost = async (req, res) => {
     await Post.findByIdAndUpdate(postId, {$pull: {likes: userId}})
     await User.updateOne({_id: userId}, { $pull: {likedPosts: postId}});
 
-    return res.status(200).json({message: "Unliked post"})
   } else {
     await Post.findByIdAndUpdate(postId, {$addToSet: {likes: userId}})
     await User.updateOne({_id: userId}, { $addToSet: {likedPosts: postId}});
 
-    const newNotification = await new Notification({
+    const newNotification = new Notification({
       from: userId,
       to: post.user,
       type: "like"
     })
     await newNotification.save();
-    return res.status(200).json({message: "Liked post"})
-  }
 
+  }
+  const updatedPost = await Post.findById(postId).select("likes");
+  return res.status(200).json(updatedPost.likes);
 
 }
 const commentOnPost = async (req, res) => {
