@@ -162,13 +162,18 @@ const commentOnPost = async (req, res) => {
     const updatedPost = await Post.findByIdAndUpdate(id, {$push: {comments: {
       text,
       user: userId
-    }}});
+    }}}, {new: true}).populate({
+      path: "comments.user",
+      select: "-password"
+    });
 
     if(!updatedPost) {
       return res.status(404).json({error: "Post not found"});
     }
 
-    return res.status(200).json({message: "Comment added"})
+    console.log(updatedPost.comments)
+
+    return res.status(200).json(updatedPost.comments)
 
   } catch (error) {
     console.log(`Error in commentOnPostController: ${error.message}`)
