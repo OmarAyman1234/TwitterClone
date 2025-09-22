@@ -135,6 +135,7 @@ const updateUserProfile = async (req, res) => {
 
       const uploadedResponse = await cloudinary.uploader.upload(profileImg)
       profileImg = uploadedResponse.secure_url;
+      user.profileImg = profileImg
     }
     
     if(coverImg) {
@@ -144,6 +145,7 @@ const updateUserProfile = async (req, res) => {
 
       const uploadedResponse = await cloudinary.uploader.upload(coverImg)
       coverImg = uploadedResponse.secure_url;
+      user.coverImg = coverImg;
     }
     
     user.fullName = fullName || user.fullName
@@ -151,8 +153,6 @@ const updateUserProfile = async (req, res) => {
     user.username = username || user.username
     user.bio = bio || user.bio
     user.link = link || user.link
-    user.profileImg = profileImg
-    user.coverImg = coverImg;
 
     await user.save();
     user.password = null;
